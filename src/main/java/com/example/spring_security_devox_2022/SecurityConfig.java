@@ -21,9 +21,10 @@ class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(authConf -> {
                     authConf.requestMatchers("/").permitAll();
+                    authConf.requestMatchers("/error").permitAll();
                     authConf.anyRequest().authenticated();
                 })
-                .formLogin(Customizer.withDefaults())
+                .httpBasic(conf -> conf.realmName("Devoxx 2022"))
                 .build();
     }
 
@@ -32,6 +33,7 @@ class SecurityConfig {
         return new InMemoryUserDetailsManager(Set.of(User.builder()
                 .username("max")
                 .password("{noop}pass123")
+                .authorities("ROLE_user")
                 .build())
         );
     }
