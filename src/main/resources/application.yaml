@@ -1,0 +1,16 @@
+spring:
+  application: { name: spring_security_devox_2022 }
+  security:
+    oauth2:
+      client:
+        provider:
+          external:
+            issuer-uri: http://localhost:8081/realms/external
+        registration:
+          external:
+            provider: external
+            client-name: external-client
+            client-id: external-client
+            client-secret: CjuLAqrRseId8gLgLseALnfPlq60GddX
+            scope: openid,offline_access,profile
+            authorization-grant-type: authorization_code

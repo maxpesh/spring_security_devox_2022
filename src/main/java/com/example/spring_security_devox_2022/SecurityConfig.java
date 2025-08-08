@@ -24,7 +24,10 @@ class SecurityConfig {
                     authConf.requestMatchers("/error").permitAll();
                     authConf.anyRequest().authenticated();
                 })
-                .httpBasic(conf -> conf.realmName("Devoxx 2022"))
+                .formLogin(Customizer.withDefaults())
+                .oauth2Login(conf -> {
+                })
+                .oauth2Client(Customizer.withDefaults())
                 .build();
     }
 
