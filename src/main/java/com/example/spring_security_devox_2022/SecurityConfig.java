@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Set;
 
@@ -28,6 +29,7 @@ class SecurityConfig {
                 .oauth2Login(conf -> {
                 })
                 .oauth2Client(Customizer.withDefaults())
+                .addFilterBefore(new RobotFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
