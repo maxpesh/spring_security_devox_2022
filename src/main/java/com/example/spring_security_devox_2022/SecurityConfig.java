@@ -20,8 +20,6 @@ import java.util.Set;
 class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        var authManager = new ProviderManager(new RobotAuthProvider(List.of("beep-boop", "boop-beep")));
-
         return httpSecurity
                 .authorizeHttpRequests(authConf -> {
                     authConf.requestMatchers("/").permitAll();
@@ -29,11 +27,12 @@ class SecurityConfig {
                     authConf.anyRequest().authenticated();
                 })
                 .formLogin(Customizer.withDefaults())
-                .oauth2Login(conf -> {
-                })
                 .oauth2Client(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .addFilterBefore(new RobotFilter(authManager), UsernamePasswordAuthenticationFilter.class)
+                .with(new RobotLoginConfigurer(), configurer -> {
+                    configurer.password("beep-boop").password("boop-beep");
+                })
                 .authenticationProvider(new AdminAuthProvider())
                 .build();
     }
