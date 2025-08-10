@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,7 +42,7 @@ class RobotFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setHeader(HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8");
-            response.getWriter().println(e.getMessage() );
+            response.getWriter().println(e.getMessage());
             return;
         }
     }
