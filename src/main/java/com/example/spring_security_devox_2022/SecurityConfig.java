@@ -2,6 +2,7 @@ package com.example.spring_security_devox_2022;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
 import java.util.Set;
 
 @Configuration
@@ -19,6 +21,8 @@ import java.util.Set;
 class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        var authManager = new ProviderManager(new RobotAuthProvider(List.of("beep-boop", "boop-beep")));
+
         return httpSecurity
                 .authorizeHttpRequests(authConf -> {
                     authConf.requestMatchers("/").permitAll();
@@ -29,7 +33,8 @@ class SecurityConfig {
                 .oauth2Login(conf -> {
                 })
                 .oauth2Client(Customizer.withDefaults())
-                .addFilterBefore(new RobotFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new RobotFilter(authManager), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(new AdminAuthProvider())
                 .build();
     }
 
